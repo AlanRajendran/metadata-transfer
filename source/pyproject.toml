@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=70"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "metadata-transfer"
+dynamic = ["version"]
+description = "Convert microscopy files between Leica LIF, Evident/Olympus cellSens VSI and Nikon NIS-Elements ND2, with their metadata"
+readme = "../README.md"
+license = "GPL-3.0-or-later"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy",
+    "liffile",
+    "tifffile",
+    "nd2",
+    "limnd2",
+    "pillow",
+    "PySide6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "pyinstaller"]
+
+[project.scripts]
+metadata-transfer = "metadata_transfer.cli:main"
+
+[project.gui-scripts]
+metadata-transfer-gui = "metadata_transfer.__main__:main"
+
+[tool.setuptools.dynamic]
+version = {attr = "metadata_transfer.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["metadata_transfer*"]
+
+[tool.setuptools.package-data]
+"metadata_transfer" = ["formats/data/*.vsi", "assets/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["../tests"]
+addopts = "-p no:cacheprovider"
+filterwarnings = ["ignore::DeprecationWarning:nd2.*"]
